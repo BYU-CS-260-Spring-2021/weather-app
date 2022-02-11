@@ -6,7 +6,7 @@ We're going to learn how to use the Open Weather Map API to fetch the current we
 
 First, edit `index.html` and add a basic form:
 
-```
+```html
 <form>
   <label>Enter a U.S. city</label>
   <input id="weatherInput" type="text"></input><br/>
@@ -22,7 +22,7 @@ We will write JavaScript inside the `script.js` file. Notice how this file is lo
 
 We will first create an event handler that is called whenever the Submit button is pressed on our form. Inside the `script.js` file, add the following event handler:
 
-```
+```js
 document.getElementById("weatherSubmit").addEventListener("click", function(event) {
   event.preventDefault();
   const value = document.getElementById("weatherInput").value;
@@ -44,14 +44,14 @@ We next use `getElementById` to get the input field from the form, and we store 
 
 At this point, you should have your own API key for the Open Weather Map service. If you don't, please see the instructions at the home page of this Wiki. We will call the API by adding this to our existing function:
 
-```
-  const url = "http://api.openweathermap.org/data/2.5/weather?q=" + value + ",US&units=imperial" + "&APPID=APIKEY";
-  fetch(url)
-    .then(function(response) {
-      return response.json();
-    }).then(function(json) {
-      console.log(json);
-    });
+```js
+const url = "http://api.openweathermap.org/data/2.5/weather?q=" + value + ",US&units=imperial" + "&APPID=APIKEY";
+fetch(url)
+  .then(function(response) {
+    return response.json();
+  }).then(function(json) {
+    console.log(json);
+  });
 ```
 
 This uses the JavaScript `fetch` method to retrieve data from the given URL. This returns a Promise. Remember that a Promise handles asynchronous execution. When we send the fetch request to the server, we don't know how long this will take. By returning a Promise, we can continue doing other work. Once the request to the server returns, JavaScript will execute the function listed in the `then` portion of the promise. In this function, we return the value of `response.json()`, which returns *another* Promise. When this Promise is finished, it will have converted the response we received from the API into a JSON object. It will call the function in the following `then`. Here we simply have a statement to print to the console so you can inspect the results. Take a look at what the JSON object contains.
@@ -64,21 +64,21 @@ You could also supply a function to call in case of an error.
 
 To format the results, you need to understand the JSON data that is returned. This is described in the documentation. Replace this last `console.log` with something like the following:
 
-```
-      let results = "";
-      results += '<h2>Weather in ' + json.name + "</h2>";
-      for (let i=0; i < json.weather.length; i++) {
-	results += '<img src="http://openweathermap.org/img/w/' + json.weather[i].icon + '.png"/>';
-      }
-      results += '<h2>' + json.main.temp + " &deg;F</h2>"
-      results += "<p>"
-      for (let i=0; i < json.weather.length; i++) {
-	results += json.weather[i].description
-	if (i !== json.weather.length - 1)
-	  results += ", "
-      }
-      results += "</p>";
-      document.getElementById("weatherResults").innerHTML = results;
+```js
+let results = "";
+results += '<h2>Weather in ' + json.name + "</h2>";
+for (let i=0; i < json.weather.length; i++) {
+  results += '<img src="http://openweathermap.org/img/w/' + json.weather[i].icon + '.png"/>';
+}
+results += '<h2>' + json.main.temp + " &deg;F</h2>"
+results += "<p>"
+for (let i=0; i < json.weather.length; i++) {
+  results += json.weather[i].description
+if (i !== json.weather.length - 1)
+  results += ", "
+}
+results += "</p>";
+document.getElementById("weatherResults").innerHTML = results;
 ```
 
 We first list the name of the city. Then we loop through the current weather and add an [image for each of the icons used to display the current weather](https://openweathermap.org/weather-conditions). We add the current temperature. We finally loop through the current weather again and add the text description of the weather.
