@@ -6,7 +6,7 @@ Let's now use the Open Weather Map API to fetch the weather forecast for a city 
 
 First, edit `index.html` and add a new div for the results, right after the current weather conditions:
 
-```
+```html
 	<div id="forecastResults">
 	</div>
 ```
@@ -15,7 +15,7 @@ First, edit `index.html` and add a new div for the results, right after the curr
 
 We will use the same event handler, since we are getting the forecast for the same city. At the end of the function, add the following:
 
-```
+```js
   const url2 = "http://api.openweathermap.org/data/2.5/forecast?q=" + value + ", US&units=imperial" + "&APPID=APIKEY";
   fetch(url2)
     .then(function(response) {
@@ -33,7 +33,7 @@ Inspect the JSON that is returned to see how this works. See also the [documenta
 
 To format the results, you need to understand the JSON data that is returned. This is described in the documentation. Replace this last `console.log` with something like the following:
 
-```
+```js
       let forecast = "";
       for (let i=0; i < json.list.length; i++) {
 	forecast += "<h2>" + moment(json.list[i].dt_txt).format('MMMM Do YYYY, h:mm:ss a') + "</h2>";
